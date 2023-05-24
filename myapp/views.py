@@ -6,6 +6,9 @@ from .forms import RegistrationForm
 
 from django.shortcuts import render, redirect
 
+def home(request):
+    return render(request, 'home.html')
+
 def create_user(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)

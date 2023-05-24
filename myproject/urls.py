@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from myapp.views import UserViewSet, ProfileViewSet, GenreViewSet, StoriesViewSet, LikeViewSet, CommentViewSet
-from myapp.views import create_user
+from myapp.views import create_user, home
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
@@ -21,6 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api/', include(router.urls)),
+
+    path('', home, name='home'),
     
     path('create_user/', create_user, name='create_user'),
 
