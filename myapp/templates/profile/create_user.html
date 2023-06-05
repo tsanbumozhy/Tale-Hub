@@ -1,14 +1,91 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create User Profile</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Profile</title>
+
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_user.css' %}">
+
+    <script src="https://kit.fontawesome.com/704721be89.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
-    <h1>User Registration</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
+    {% block content %}
+        <div class="container">
+            <form method="POST" enctype="multipart/form-data">
+                <h5 id="title">Create Profile</h5>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        {{ form.email }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        </div>
+                        {{ form.password }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        </div>
+                        {{ form.confirm_password }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.pen_name.id_for_label }}">Pen Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                        </div>
+                        {{ form.pen_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.profile_photo.id_for_label }}">Profile Photo</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-image"></i></span>
+                        </div>
+                        {{ form.profile_photo }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.bio.id_for_label }}">Bio</label>
+                    <div class="input-group">
+                        {{ form.bio }}
+                    </div>
+                </div>
+                <div class="btn-field">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+
+            </form>
+        </div>
+    {% endblock %}
 </body>
 </html>

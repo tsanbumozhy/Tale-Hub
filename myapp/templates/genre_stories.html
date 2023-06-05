@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ Genre.name }}</title>
+</head>
+<body>
+    {% block content %}
+        <h2>{{ Genre.name }} Stories</h2>
+        {% for story in Stories %}
+            <div>
+                <img src="{{ story.cover_image.url }}" alt="{{ story.title }} Cover">
+                <h3>{{ story.title }}</h3>
+                <p>Created at: {{ story.created_at }}</p>
+                <p>Author: {{ story.author.username }}</p>
+            </div>
+        {% empty %}
+            <p>No stories available for this Genre.</p>
+        {% endfor %}
+    {% endblock %}
+</body>
+</html>

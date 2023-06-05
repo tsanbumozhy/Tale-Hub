@@ -1,15 +1,88 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Wattpad-replica</title>
+
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+
+    <script src="https://kit.fontawesome.com/704721be89.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+    <div id="header">
+        <!-- Common header content -->
+        <div class="navbar">
+            <button class="nav-button"><p class="head-title">Wattpad</p></button>
+            <button class="nav-button">
+                <button><a href="{% url 'home' %}">Home</a></button>
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        Genres <i class="fa-solid fa-caret-down" style="color: #ffffff;"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        {% for genre in Genres %}
+                            {% if forloop.counter <= 10 %}
+                                <a class="dropdown-item" href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        <a href="{% url 'genres' %}">more...</a>
+                    </div>
+                </div>
+            </button>
+            <button><a href="{% url 'create_story' %}">Write <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></a></button>
+            <button class="search">
+                <input type="text" placeholder="Search" style="height: 30px; padding: 0 5px;">
+                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff; padding: 0 5px 0 0;"></i>
+            </button>
+            <button class="nav-button">
+                <button style="border-radius: 50%; margin-right: 0;">
+                    {% if user.is_authenticated %}
+                        <img src="{{ Profile.profile_photo.url }}" alt="{{ Profile.pen_name }}" style="height: 25px; border-radius: 50%; border-style: sobuttond;">
+                    {% else %}
+                        <button><a href="./registration/login.html">Login</a></button>
+                    {% endif %}
+                </button>
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        {{ User.username }} <i class="fa-solid fa-caret-down" style="color: #ffffff;"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">My List</a>
+                        <a href="#">Read-list</a>
+                        <a href="#">Favourites</a>
+                        <a href="#">Edit Profile</a>
+                        <a href="{% url 'logout' %}" style="color: #b40000;">
+                            <i class="fa-solid fa-right-from-bracket" style="color: #b40000;"></i> logout
+                        </a>
+                    </div>
+                </div>
+            </button>
+        </div>      
+    
+        <div class="search-bar">
+            <button style="border-style: solid; border-radius: 6px; border-width: 2px; border-color: black;">
+                <input type="text" placeholder="Search" style="height: 30px; padding: 0 5px;">
+                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff; padding: 0 5px 0 0;"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <div id="footer">
+        <!-- Common footer content -->
+        <br>
+        <footer>
+            <p class="head-title">Wattpad</p>
+            <br><br>
+    
+        </footer>
+    </div>
 </body>
 </html>

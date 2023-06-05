@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +8,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wattpad-replica</title>
+
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+
+    <script src="https://kit.fontawesome.com/704721be89.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h3>Wattpad</h3>
-    
+    {% block content %}
+        <div class="stories-list">
+            {% for story in Stories %}
+                <div class="story">
+                    <div class="cover">
+                        <img src="{{ story.cover_image.url }}" alt="Book Cover">
+                    </div>
+                    <div class="details">
+                        <h3>{{ story.title }}</h3>
+                        <p><strong>Genre:</strong> {{ story.genre_id.name }}</p>
+                        <p><strong>Author:</strong> {{ story.author.username }}</p>
+                        <p><strong>Date Created:</strong> {{ story.created_at|date:"F d, Y" }}</p>
+                    </div>
+                </div>
+            {% endfor %}  
+        </div> 
+        <link rel="stylesheet" href="{% static 'css/stories.css' %}">
+    {% endblock %}
 </body>
 </html>

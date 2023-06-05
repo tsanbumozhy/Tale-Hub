@@ -6,7 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from myapp.views import UserViewSet, ProfileViewSet, GenreViewSet, StoriesViewSet, LikeViewSet, CommentViewSet
-from myapp.views import create_user, home
+from myapp.views import home, genres, genre_stories, create_user, create_story
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
@@ -23,6 +23,11 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     path('', home, name='home'),
+
+    path('create_story/', create_story, name='create_story'),
+
+    path('genres/', genres, name='genres'),
+    path('genre_stories/<str:genre_name>/', genre_stories, name='genre_stories'),
     
     path('create_user/', create_user, name='create_user'),
 
@@ -31,5 +36,5 @@ urlpatterns = [
     path('accounts/password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

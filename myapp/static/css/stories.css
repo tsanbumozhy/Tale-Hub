@@ -1,0 +1,9 @@
+.stories-list{
+    margin: 50px 5%;
+    display: inline-flex;
+}
+
+.story{
+    display: table-cell;
+    margin: 25px
+}

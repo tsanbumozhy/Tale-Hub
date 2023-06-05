@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genres</title>
+</head>
+<body>
+    {% block content %}
+        <div class="genres">
+            {% for genre in Genres %}
+                <a href="#">{{ genre.name }}</a>
+                <p><br>{{ genre.description }}</p>
+                <br><br>
+            {% endfor %}
+        </div>
+        <style>
+            .genres{
+                padding: 3% 5%;
+                background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrUQnzJF3xrVkTJSC9h8m2rt8F-urjd6w-wg&usqp=CAU');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
+            .genres a{
+                color: black;
+                padding: 30px 0;
+                font-size: x-large;
+                text-decoration: none;
+            }
+
+            .genres p{
+                padding: 0 35px;
+                font-size: large;
+            }
+        </style>
+    {% endblock %}
+</body>
+</html>

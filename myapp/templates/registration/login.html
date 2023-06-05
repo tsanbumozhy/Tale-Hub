@@ -1,11 +1,49 @@
-{% extends '../base.html' %}
+{% load static %}
 
-{% block content %}
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'create_user' %}">Register</a></p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <script src="https://kit.fontawesome.com/704721be89.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% block content %}
+        <div class="container">
+            <form method="post">
+                <h5 id="title">Login</h5>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        </div>
+                        {{ form.password }}
+                    </div>
+                </div>
+                <div class="btn-field">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                
+                <p class="sign-up">Don't have an account? <a href="{% url 'create_user' %}">Register</a></p>
+            </form>
+        </div>
+    {% endblock %}
+</body>
+</html>
