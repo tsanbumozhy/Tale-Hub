@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_user.css' %}">
+
+    <script src="https://kit.fontawesome.com/704721be89.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    {% block content %}
+        <div class="container">
+            <form method="POST" enctype="multipart/form-data">
+                <h5 id="title">Edit Profile</h5>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.pen_name.id_for_label }}">Pen Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-pen"></i></span>
+                        </div>
+                        {{ form.pen_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <img id="profile-photo-preview" src="{{ form.instance.profile_photo.url }}" alt="Profile Photo" width="150" style="border-radius: 100px;">
+                    <br>
+                    Change
+                    <input type="file" name="profile_photo" class="form-control-file" id="profile-photo-input" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.bio.id_for_label }}">Bio</label>
+                    <div class="input-group">
+                        {{ form.bio }}
+                    </div>
+                </div>
+
+                <div class="btn-field">
+                    <button><a href="{%url 'home' %}">Cancel</a></button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+
+            </form>
+        </div>
+        <link rel="stylesheet" href="{% static 'css/create_user.css' %}">
+        {% block styles %}
+            <style>
+                .navbar{
+                    box-shadow: none;
+                }
+
+                input{
+                    padding: 10px 8px;
+                    margin: 10px 15px;
+                }
+            </style>
+        {% endblock %}
+    {% endblock %}
+</body>
+</html>

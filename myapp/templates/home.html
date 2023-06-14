@@ -15,21 +15,49 @@
 </head>
 <body>
     {% block content %}
-        <div class="stories-list">
-            {% for story in Stories %}
-                <div class="story">
-                    <div class="cover">
-                        <img src="{{ story.cover_image.url }}" alt="Book Cover">
-                    </div>
-                    <div class="details">
-                        <h3>{{ story.title }}</h3>
-                        <p><strong>Genre:</strong> {{ story.genre_id.name }}</p>
-                        <p><strong>Author:</strong> {{ story.author.username }}</p>
-                        <p><strong>Date Created:</strong> {{ story.created_at|date:"F d, Y" }}</p>
-                    </div>
+        <div class="wrap">
+            <div class="top-stories">
+                <h2>Top Stories</h2>
+                <div class="stories-list">
+                    {% for story in Stories %}
+                        <a class="story" href="{% url 'story_details' story_id=story.story_id %}">
+                            <div class="cover">
+                                <img src="{{ story.cover_image.url }}" alt="Book Cover">
+                            </div>
+                            <div class="details">
+                                <h3>{{ story.title }}</h3>
+                                {% for genre in story.genre_id.all %}
+                                    <p class="genre">{{ genre.name }}</p>
+                                {% endfor %}
+                                <p class="author">By {{ story.author.profile.pen_name }}</p>
+                                <p class="date">{{ story.created_at|date:"F d, Y" }}</p>
+
+                                {% if story.description|length < 150 %}
+                                    <p>{{ story.description }}</p>
+                                {% else %}
+                                    <p>
+                                        {{ story.description|slice:":150" }} 
+                                        <strong>See more...</strong>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}  
                 </div>
-            {% endfor %}  
-        </div> 
+            </div> 
+
+            <div class="side-nav">
+                <br><br><br>
+                <h3 class="title">Popular genres</h3>
+                {% for genre in Genres %}
+                    {% if forloop.counter <= 10 %}
+                        <a class="genre" href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
+                    {% endif %}
+                {% endfor %}
+                <a class="genre" href="{% url 'genres' %}" style="background-color: #00000059; color: white;">more</a>
+            </div>
+        </div>
+        
         <link rel="stylesheet" href="{% static 'css/stories.css' %}">
     {% endblock %}
 </body>

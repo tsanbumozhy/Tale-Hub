@@ -7,16 +7,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ Genre.name }}</title>
 </head>
 <body>
     {% block content %}
         {% if Stories|length == 0 %}
             <div class="wrap" style="display: block;">
-                <h2>{{ Genre.name }} Stories</h2>
-                <div class="story">
-                    <p>No stories available for this Genre.</p>
-                </div>
+                {% if Flag == 1 %}
+                    <h2>My List</h2>
+                    <div class="story">
+                        <p>You have not written any Stories yet.</p>
+                    </div>
+                {% elif Flag == 2 %}
+                    <h2>Read-list</h2>
+                    <div class="story">
+                        <p>You have not read any Stories yet.</p>
+                    </div>
+                {% else %}
+                    <h2>Liked Stories</h2>
+                    <div class="story">
+                        <p>You have not liked any Stories yet.</p>
+                    </div>
+                {% endif %}
 
                 <div class="side-nav">
                     <br>
@@ -32,7 +43,13 @@
         {% else %}
             <div class="wrap">
                 <div class="genre-stories">
-                    <h2>{{ Genre.name }} Stories</h2>
+                    {% if Flag == 1 %}
+                        <h2>My List</h2>
+                    {% elif Flag == 2 %}
+                        <h2>Read-list</h2>
+                    {% else %}
+                        <h2>Liked Stories</h2>
+                    {% endif %}
                     <div class="stories-list">
                         {% for story in Stories %}
                             <a class="story" href="{% url 'story_details' story_id=story.story_id %}">
@@ -63,7 +80,7 @@
 
                 <div class="side-nav">
                     <br><br><br>
-                    <h3 class="title">Other Popular genres</h3>
+                    <h3 class="title">Popular genres</h3>
                     {% for genre in Genres %}
                         {% if forloop.counter <= 10 %}
                             <a class="genre" href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>

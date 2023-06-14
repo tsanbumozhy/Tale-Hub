@@ -10,8 +10,8 @@ a{
 }
 
 .head-title{
-    font-size: xx-large;
     font-weight: 500;
+    font-size: xx-large;
     font-family: 'Brush Script MT', cursive;
 }
 
@@ -20,15 +20,19 @@ a{
     color: white;
     background-color: black;
     justify-content: center;
-    box-shadow: 5px 10px 8px #888888;;
+    box-shadow: 2px 2px 10px #888888;
 }
 
 .navbar button{
     border: none;
     margin: 10px;
-    color: white;
+    color: inherit;
     font-weight: bold;
-    background-color: black;
+    background-color: inherit;
+}
+
+.navbar button a{
+    padding: 20px 0;
 }
 
 .navbar .search{
@@ -59,7 +63,7 @@ a{
 }
 
 .dropdown .dropbtn {
-    color: white;
+    color: inherit;
     padding: 16px 0;
     background-color: inherit;
 }
@@ -120,11 +124,56 @@ a{
 }
 
 footer{
-    background-color: black;
     color: white;
+    padding: 0 20%;
     text-align: center;
+    background-color: black;
 }
 
-.abc{
-    background-color: #888888;
+footer .footer-content{
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 900px) {
+    footer .footer-content{
+        display: block;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    footer .footer-content{
+        display: flex;
+    }
+}
+
+footer h2{
+    font-family: cursive;
+}
+
+footer h2:hover{
+    text-decoration: underline;
+    text-decoration-style: double;
+}
+
+footer div{
+    display: block;
+    padding: 0 2% ;
+}
+
+footer div a{
+    list-style: none;
+    display: list-item;
+    padding-bottom: 10px;
+}
+
+footer div a:hover{
+    color: rgba(255, 255, 255, 0.514);
+}
+
+footer .col-2 .col-a,
+footer .col-2 .col-b{
+    padding: 0 25px;
+    list-style: none;
+    display: inline-block;
 }

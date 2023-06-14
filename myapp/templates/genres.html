@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,32 +12,35 @@
     {% block content %}
         <div class="genres">
             {% for genre in Genres %}
-                <a href="#">{{ genre.name }}</a>
+                <a href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
                 <p><br>{{ genre.description }}</p>
                 <br><br>
             {% endfor %}
         </div>
-        <style>
-            .genres{
-                padding: 3% 5%;
-                background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrUQnzJF3xrVkTJSC9h8m2rt8F-urjd6w-wg&usqp=CAU');
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-position: center;
-            }
+    
+        {% block styles %}
+            <style>
+                .genres{
+                    padding: 3% 5%;
+                    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrUQnzJF3xrVkTJSC9h8m2rt8F-urjd6w-wg&usqp=CAU');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
 
-            .genres a{
-                color: black;
-                padding: 30px 0;
-                font-size: x-large;
-                text-decoration: none;
-            }
+                .genres a{
+                    color: #022458;
+                    padding: 30px 0;
+                    font-size: x-large;
+                    text-decoration: none;
+                }
 
-            .genres p{
-                padding: 0 35px;
-                font-size: large;
-            }
-        </style>
+                .genres p{
+                    padding: 0 35px;
+                    font-size: large;
+                }
+            </style>
+        {% endblock %}
     {% endblock %}
 </body>
 </html>

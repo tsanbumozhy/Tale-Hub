@@ -1,8 +1,9 @@
 from django import forms
+from django.core.files import File
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Profile, Stories, Genre
+from .models import Profile, Stories, Genre, Comment
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
@@ -10,7 +11,7 @@ class RegistrationForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
     pen_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Pen Name'}))
-    profile_photo = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control-file'}))
+    profile_photo = forms.ImageField(widget=forms.ClearableFileInput(attrs={'class': 'my-custom-class'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 3, 'cols': 35}))
 
     def clean_username(self):
@@ -34,26 +35,51 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError("Passwords do not match.")
 
         return cleaned_data
-
+    
     def save(self, commit=True):
         user = User.objects.create_user(
             username=self.cleaned_data['username'],
             email=self.cleaned_data['email'],
             password=self.cleaned_data['password']
         )
+        
         profile_data = {
             'user': user,
             'pen_name': self.cleaned_data['pen_name'],
-            'profile_photo': self.files['profile_photo'],
             'bio': self.cleaned_data['bio'],
         }
-
+        
+        profile_photo = self.cleaned_data.get('profile_photo')
+        if profile_photo:
+            profile_photo_file = File(profile_photo)
+            profile_data['profile_photo'] = profile_photo_file
         profile = Profile.objects.create(**profile_data)
         return user, profile
 
+
+
+    
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['pen_name', 'bio', 'profile_photo']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 3, 'cols': 35}),
+            'pen_name': forms.TextInput(),
+            'profile_photo': forms.ClearableFileInput(attrs={'class': 'form-control-file', 'id': 'profile_photo'})
+        }
+
 class StoryForm(forms.ModelForm):
-    genre_id = forms.ModelChoiceField(queryset=Genre.objects.all(), label='Genre', to_field_name='name')
+    genre_id = forms.ModelMultipleChoiceField(queryset=Genre.objects.all(), widget=forms.CheckboxSelectMultiple, label='Genre', to_field_name='name')
 
     class Meta:
         model = Stories
         fields = ['title', 'genre_id', 'description', 'cover_image', 'content_url']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'placeholder': 'Add your comment'}),
+        }

@@ -25,7 +25,7 @@ class Stories(models.Model):
     story_id = models.AutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    genre_id = models.ManyToManyField(Genre)
     description = models.TextField()
     cover_image = models.ImageField(upload_to='stories/covers/')
     content_url = models.FileField(upload_to='stories/pdfs/')
@@ -36,12 +36,13 @@ class Stories(models.Model):
         return str(self.story_id)
 
 class Like(models.Model):
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    story_id = models.ForeignKey(Stories, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    story = models.ForeignKey(Stories, on_delete=models.CASCADE)
     liked = models.BooleanField()
 
 class Comment(models.Model):
-    profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    story_id = models.ForeignKey(Stories, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    story = models.ForeignKey(Stories, on_delete=models.CASCADE)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)

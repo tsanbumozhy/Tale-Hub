@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wattpad</title>
+
+</head>
+    <body>
+    {% block content %}
+        <div class="container">
+            
+            <div class="story-header">
+                <img src="{{ Story.cover_image.url }}" alt="Book Cover">
+                
+                <div class="info">
+                    <h1>{{ Story.title }}</h1>
+                    <p class="author">- {{ Story.author.profile.pen_name }}</p>
+                    <br><br><br>
+
+                    <div class="story-stats">
+                        <table style="display: initial;">
+                            <tr>
+                                <th>
+                                    &nbsp;
+                                    <i class="fa-regular fa-eye" style="color: inherit;"></i>
+                                    <span>Reads&nbsp;</span>
+                                </th>
+                                <th>
+                                    <i class="fa-solid fa-heart" style="color: red;"></i>
+                                    <span>Likes&nbsp;</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>{{ Count.reads }}</td>
+                                <td>{{ Count.likes }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br>
+
+                </div>
+            </div>
+
+            <div class="wrap">
+                <div class="details">
+                    {% for genre in Story.genre_id.all %}
+                        <p class="genre">{{ genre.name }}</p>
+                    {% endfor %}
+                    <a href="{% url 'add_like' story_id=Story.story_id %}" class="like-icon">
+                        {% if Like.liked == True %}
+                            <i id="like-button" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+                        {% else %}
+                            <i id="like-button" class="fa-regular fa-heart" style="color: #ff0000;"></i>
+                        {% endif %}
+                    </a>
+                    <p class="date" style="font-size: smaller;">Created - {{ Story.created_at|date:"F d, Y" }}</p>
+                    <p style="font-size: smaller;">Last edited - {{ Story.updated_at|date:"F d, Y" }}</p>
+    
+                    <br>
+    
+                    <p style="max-width: 95%;">&nbsp;&nbsp;&nbsp;&nbsp;{{ Story.description }}</p>
+                </div>
+    
+                <div class="features">
+                    <a href="#  Q">
+                        <button style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                            <i class="fa-brands fa-readme"></i> Start Reading
+                        </button>
+                    </a>
+                    <button id="add-comment-button" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" title="Add a Review">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <h2>Comments</h2>
+            <div class="comments-list">
+                {% for comment in Comments %}
+                    <div class="comment-block">
+                        <div class="profile">
+                            <img src="{{ comment.profile.profile_photo.url }}" alt="{{ comment.profile.user.username }}" style="height: 50px; border-radius: 50%; border-style: double;">
+                            {% if comment.last_updated != comment.created_at %}
+                                <h3><br>&ensp;{{ comment.profile.user.username }} <span style="font-size: x-small;">(edited)</span> <br> <span style="font-size: x-small;">&ensp;&ensp;{{ comment.last_updated|date:"F d, Y" }}</span></h3>
+                            {% else %}
+                                <h3><br>&ensp;{{ comment.profile.user.username }} <br> <span style="font-size: x-small;">&ensp;&ensp;{{ comment.created_at|date:"F d, Y" }}</span></h3>
+                            {% endif %}
+                        </div>
+                        <div class="comment">
+                            <p class="comment-text">{{ comment.comment }}</p>
+                            <p class="comment-info">Posted by {{ comment.profile.user.username }} on {{ comment.created_at|date:"F d, Y" }}</p>
+                            {% if comment.profile.user == request.user %}
+                                <form class="edit-comment-form" action="{% url 'edit_comment' story_id=Story.story_id comment_id=comment.id %}" method="post">
+                                    {% csrf_token %}
+                                    <textarea class="edit-comment-textarea" name="comment">{{ comment.comment }}</textarea>
+                                    <button class="save-comment-button" type="submit">Save</button>
+                                    <button class="cancel-comment-button" type="button">Cancel</button>
+                                </form>
+                                <form class="delete-comment-form" action="{% url 'delete_comment' story_id=Story.story_id comment_id=comment.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="delete-comment-button" type="submit">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>                
+                {% empty %}
+                    <p>No comments yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% block scripts %}
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const cancelButtons = document.querySelectorAll('.cancel-comment-button');
+                    const editForms = document.querySelectorAll('.edit-comment-form');
+
+                    cancelButtons.forEach((cancelButton, index) => {
+                        cancelButton.addEventListener('click', () => {
+                            editForms[index].style.display = 'none';
+                        });
+                    });
+                });
+            </script>
+        {% endblock %}
+
+
+        {% block styles %}
+            <style>
+                .like-icon{
+                    float: right;
+                    padding-right: 65px;
+                }
+
+                .container{
+                    margin: 60px 8%;
+                    text-align: center;
+                }
+
+                .story-header{
+                    display: inline-flex;
+                    padding: 30px 20px;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                }
+
+                .story-header img{
+                    height: fill;
+                    width: 200px;
+                }
+
+                .info{
+                    margin: 0 10px;
+                    max-width: 270px;
+                }
+
+                .info .author{
+                    text-align: end;
+                }
+
+                .story-stats{
+                    font-size: smaller;
+                    text-align: center;
+                }
+
+                .wrap{
+                    display: flex;
+                    margin-top: 50px;
+                }
+
+                .details{
+                    width: 55%;
+                    margin-left: 15%;
+                    text-align: left;
+                    display: inline-block;
+                }
+
+                .details .genre{
+                    color: white;
+                    max-width: 110px;
+                    padding: 5px 10px;
+                    font-size: medium;
+                    text-align: center;
+                    border-radius: 25px;
+                    display: inline-flex;
+                    background-color: #5bffd1;
+                }
+
+                .features{
+                    padding: 45px 25px;
+                    text-align: center;
+                    display: inline-block;
+                }
+
+                .features button{
+                    color: white;
+                    font-size: large;
+                    padding: 10px 15px;
+                    border-radius: 50px;
+                    background-color: black;
+                }
+
+                .features button:hover{
+                    padding: 12px 15px;
+                }
+
+                .like-button {
+                    color: black;
+                    cursor: pointer;
+                    margin: 20px 0;
+                }
+                
+                .like-button.active {
+                    color: red;
+                }
+
+                /* CSS styles for comments section */
+                .comments-section {
+                    margin: 0 15%;
+                }
+
+                .comments-list {
+                    margin: 25px 0 0 50px;
+                }
+
+                .comment-block {
+                    margin-bottom: 25px;
+                }
+
+                .comment-block .profile{
+                    display: flex;
+                }
+
+                .comment {
+                    margin: 10px 0 0 40px;
+                }
+
+                .comment-text {
+                    font-size: large;
+                }
+
+                .comment-info {
+                    font-size: small;
+                    color: #888;
+                }
+            </style>
+        {% endblock %}
+
+    {% endblock %}
+</body>
+</html>

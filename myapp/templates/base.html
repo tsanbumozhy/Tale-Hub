@@ -21,7 +21,7 @@
                 <button><a href="{% url 'home' %}">Home</a></button>
                 <div class="dropdown">
                     <button class="dropbtn">
-                        Genres <i class="fa-solid fa-caret-down" style="color: #ffffff;"></i>
+                        Genres <i class="fa-solid fa-caret-down" style="color: inherit;"></i>
                     </button>
                     <div class="dropdown-content">
                         {% for genre in Genres %}
@@ -33,29 +33,35 @@
                     </div>
                 </div>
             </button>
-            <button><a href="{% url 'create_story' %}">Write <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i></a></button>
+            <button><a href="{% url 'create_story' %}">Write <i class="fa-solid fa-pen-to-square" style="color: inherit;"></i></a></button>
             <button class="search">
-                <input type="text" placeholder="Search" style="height: 30px; padding: 0 5px;">
-                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff; padding: 0 5px 0 0;"></i>
+                <form action="{% url 'search' %}" method="GET">
+                    <input type="text" name="q" placeholder="Search" autocomplete="off" style="height: 30px; margin: 0; padding: 0 5px; background-color: whitesmoke;">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass" style="color: inherit; padding: 0 5px 0 0;"></i></button>
+                </form>
             </button>
             <button class="nav-button">
                 <button style="border-radius: 50%; margin-right: 0;">
                     {% if user.is_authenticated %}
-                        <img src="{{ Profile.profile_photo.url }}" alt="{{ Profile.pen_name }}" style="height: 25px; border-radius: 50%; border-style: sobuttond;">
+                        {% if Profile.profile_photo %}
+                            <img src="{{ Profile.profile_photo.url }}" alt="{{ Profile.pen_name }}" style="height: 25px; border-radius: 50%; border-style: solid;">
+                        {% else %}
+                            <img src="../media/user.png" alt="{{ Profile.pen_name }}" style="height: 25px; border-radius: 50%; border-style: solid;">
+                        {% endif %}
                     {% else %}
                         <button><a href="./registration/login.html">Login</a></button>
                     {% endif %}
                 </button>
                 <div class="dropdown">
                     <button class="dropbtn">
-                        {{ User.username }} <i class="fa-solid fa-caret-down" style="color: #ffffff;"></i>
+                        {{ User.username }} <i class="fa-solid fa-caret-down" style="color: inherit"></i>
                     </button>
                     <div class="dropdown-content">
-                        <a href="#">My List</a>
-                        <a href="#">Read-list</a>
-                        <a href="#">Favourites</a>
-                        <a href="#">Edit Profile</a>
-                        <a href="{% url 'logout' %}" style="color: #b40000;">
+                        <a href="{% url 'my_list'%}">My List</a>
+                        <a href="{% url 'read_list'%}">Read-list</a>
+                        <a href="{% url 'liked_stories'%}">Favourites</a>
+                        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+                        <a href="#" onclick="logoutConfirmation()" style="color: #b40000;">
                             <i class="fa-solid fa-right-from-bracket" style="color: #b40000;"></i> logout
                         </a>
                     </div>
@@ -66,7 +72,7 @@
         <div class="search-bar">
             <button style="border-style: solid; border-radius: 6px; border-width: 2px; border-color: black;">
                 <input type="text" placeholder="Search" style="height: 30px; padding: 0 5px;">
-                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff; padding: 0 5px 0 0;"></i>
+                <i class="fa-solid fa-magnifying-glass" style="color: inherit; padding: 0 5px 0 0;"></i>
             </button>
         </div>
     </div>
@@ -79,10 +85,53 @@
         <!-- Common footer content -->
         <br>
         <footer>
-            <p class="head-title">Wattpad</p>
-            <br><br>
-    
+            <p class="head-title" style="padding: 20px;">Wattpad</p>
+            <br>
+            <div class="footer-content">
+                <div class="col-1">
+                    <h2>Quick Links</h2>
+                    <br>
+                    <a href="{% url 'home' %}">Home</a>
+                    <a href="{% url 'create_story' %}">Write <i class="fa-solid fa-pen-to-square" style="color: inherit;"></i></a>
+                </div>
+
+                <div class="col-2">
+                    <h2>Genres</h2>
+                    <br>
+                    <div class="col-a">
+                        {% for genre in Genres %}
+                            {% if forloop.counter <= 5 %}
+                                <a href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-b">
+                        {% for genre in Genres %}
+                            {% if forloop.counter > 5 and forloop.counter <= 9 %}
+                                <a href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        <a href="{% url 'genres' %}">more...</a>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <img src="{{ Profile.profile_photo.url }}" alt="{{ Profile.pen_name }}" style="height: 100px; border-radius: 50%; border-style: solid;">
+
+                    <a href="{% url 'my_list'%}">My List</a>
+                    <a href="{% url 'read_list'%}">Read-list</a>
+                    <a href="{% url 'liked_stories'%}">Favourites</a>
+                </div>
+            </div>
         </footer>
     </div>
 </body>
+<script>
+    function logoutConfirmation() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = "{% url 'logout' %}";
+      }
+    }
+  </script>
 </html>
