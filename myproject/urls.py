@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from myapp.views import UserViewSet, ProfileViewSet, GenreViewSet, StoriesViewSet, LikeViewSet, CommentViewSet
 from myapp.views import home, search, logout_view, genres, genre_stories, create_user, create_story, story_details, edit_profile, like
-from myapp.views import my_stories, read_list, favourites, add_comment, edit_comment, delete_comment
+from myapp.views import my_stories, read_list, favourites, add_comment, edit_comment, delete_comment, view_pdf
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
@@ -30,9 +30,11 @@ urlpatterns = [
     path('create_story/', create_story, name='create_story'),
     path('story/<str:story_id>/', story_details, name='story_details'),
 
+    path('story/<int:story_id>/pdf/', view_pdf, name='view_pdf'),
+
     path('story/<str:story_id>/like', like, name='add_like'),
-    path('story/<int:story_id>/', story_details, name='story_details'),
     path('story/<int:story_id>/add_comment/', add_comment, name='add_comment'),
+    
     path('story/<int:story_id>/edit_comment/<int:comment_id>/', edit_comment, name='edit_comment'),
     path('story/<int:story_id>/delete_comment/<int:comment_id>/', delete_comment, name='delete_comment'),
 

@@ -1,8 +1,9 @@
+from django.conf import settings
 from rest_framework import viewsets
 from django.db.models import Q
 from django.utils import timezone
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -112,6 +113,17 @@ def story_details(request, story_id):
 
     return render(request, 'story_details.html', context)
 
+def view_pdf(request, story_id):
+    try:
+        story = Stories.objects.get(story_id=story_id)
+    except Stories.DoesNotExist:
+        return render(request, 'error.html', {'message': 'Story not found'})
+
+    pdf_file_path = story.content_url.path
+
+    response = FileResponse(open(pdf_file_path, 'rb'), content_type='application/pdf')
+    return response
+
 def like(request, story_id):
     username = request.user.username
     user_details = User.objects.get(username=username)
@@ -124,30 +136,50 @@ def like(request, story_id):
 
     like_status.liked = not like_status.liked
     like_status.save()
-    
+
+    comments = Comment.objects.filter(story=story)
+
     read_count = Like.objects.filter(story=story).count()
     likes_count = Like.objects.filter(story=story, liked=True).count()
+    comment_count = Comment.objects.filter(story=story).count() 
 
-    count = { 'reads': read_count, 'likes': likes_count }
+    count = { 'reads': read_count, 'likes': likes_count, 'num_comment': comment_count }
 
-    context = { 'User': user_details, 'Profile': profile_details, 'Genres': genres, 'Story': story, 'Like': like_status, 'Count': count }
+    context = { 'User': user_details, 'Profile': profile_details, 'Genres': genres, 'Story': story, 'Like': like_status, 'Comments': comments, 'Count': count }
 
     return render(request, 'story_details.html', context)
 
 def add_comment(request, story_id):
+    username = request.user.username
+    user_details = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user=user_details.id)
+    genres = Genre.objects.all
+
+    story = get_object_or_404(Stories, story_id=story_id)
+
     if request.method == 'POST':
         comment_text = request.POST['comment']
-        username = request.user.username
-        user_details = User.objects.get(username=username)
-        profile_details = Profile.objects.get(user=user_details.id)
-        genres = Genre.objects.all
-        
-        story = get_object_or_404(Stories, story_id=story_id)
 
         comment = Comment(profile=profile_details, story=story, comment=comment_text)
-        comment.save()
+        comment.save()    
 
-        return redirect('story_details', story_id=story_id)
+    read = Like.objects.filter(profile=profile_details, story=story)
+    if not read:
+        Like.objects.create(profile=profile_details, story=story, liked=False)
+
+    like_status = Like.objects.get(profile=profile_details, story=story)
+
+    comments = Comment.objects.filter(story=story)
+
+    read_count = Like.objects.filter(story=story).count()
+    likes_count = Like.objects.filter(story=story, liked=True).count()
+    comment_count = Comment.objects.filter(story=story).count() 
+
+    count = { 'reads': read_count, 'likes': likes_count, 'num_comment': comment_count }
+
+    context = { 'User': user_details, 'Profile': profile_details, 'Genres': genres, 'Story': story, 'Like': like_status, 'Comments': comments, 'Count': count }
+
+    return render(request, 'story_details.html', context)
 
 def edit_comment(request, story_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)

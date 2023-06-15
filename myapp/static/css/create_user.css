@@ -14,7 +14,7 @@ body{
     background-size: cover;
 }
 
-form{
+.container form{
     width: 650px;
     margin: 10% 25%;
     padding: 30px 5px;

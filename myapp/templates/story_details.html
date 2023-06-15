@@ -68,15 +68,16 @@
                 </div>
     
                 <div class="features">
-                    <a href="#  Q">
+                    <a href="{% url 'view_pdf' story_id=Story.story_id %}">
                         <button style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
                             <i class="fa-brands fa-readme"></i> Start Reading
                         </button>
                     </a>
-                    <button id="add-comment-button" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" title="Add a Review">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                    
+                    <a href="#comment-form">
+                        <button id="add-comment-button" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" title="Add a Review">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </a>                    
                 </div>
             </div>
         </div>
@@ -115,6 +116,15 @@
                 {% empty %}
                     <p>No comments yet.</p>
                 {% endfor %}
+            </div>
+            <div class="add-comment" style="padding-left: 8%;">
+                <br><br>
+                <h2>Add a Review</h2>
+                <form id="comment-form" action="{% url 'add_comment' story_id=Story.story_id %}" method="POST">
+                    {% csrf_token %}
+                    <textarea id="comment-text" name="comment" rows="4" cols="50" placeholder="Write a comment"></textarea>
+                    <button type="submit">Add Comment</button>
+                </form>
             </div>
         </div>
 
