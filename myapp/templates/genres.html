@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,33 +13,52 @@
 <body>
     {% block content %}
         <div class="genres">
-            {% for genre in Genres %}
-                <a href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
-                <p><br>{{ genre.description }}</p>
-                <br><br>
-            {% endfor %}
+            <div class="genres-grid">
+                {% for genre in Genres %}
+                    <div class="genre-box">
+                        <a href="{% url 'genre_stories' genre_name=genre.name %}">{{ genre.name }}</a>
+                        <p>{{ genre.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     
         {% block styles %}
             <style>
-                .genres{
+                .genres {
                     padding: 3% 5%;
-                    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrUQnzJF3xrVkTJSC9h8m2rt8F-urjd6w-wg&usqp=CAU');
+                    background-image: url('https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
+                    background-attachment: fixed;
                 }
 
-                .genres a{
-                    color: #022458;
-                    padding: 30px 0;
-                    font-size: x-large;
+                .genres-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 20px;
+                    justify-items: center;
+                    align-items: center;
+                }
+
+                .genre-box {
+                    background-color: #ffffff77;
+                    padding: 20px;
+                    text-align: center;
+                }
+
+                .genre-box a {
+                    font-size: 1.5rem;
                     text-decoration: none;
+                    font-family: 'FontAwesome';
+                    font-variant-caps: petite-caps;
                 }
 
-                .genres p{
-                    padding: 0 35px;
-                    font-size: large;
+                .genre-box p {
+                    margin-top: 10px;
+                    font-size: 1.2rem;
+                    font-family: cursive;
                 }
             </style>
         {% endblock %}

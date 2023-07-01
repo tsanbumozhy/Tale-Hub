@@ -39,7 +39,7 @@
     text-align: center;
     border-radius: 25px;
     display: inline-flex;
-    background-color: #5bffd1;
+    background-color: #21614f;
 }
 
 .story .details .author{
@@ -53,7 +53,7 @@
 }
 
 .story .details p{
-    padding: 10px 15px;
+    padding: 4px 10px;
     font-family:'Gill Sans', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -78,11 +78,10 @@
 .side-nav a{
     margin: 5px 1px;
     padding: 8px 12px;
-    background-color: #ff9900f0;
+    background-color: #396974f0;
 }
 
 .side-nav a:hover{
     padding: 10px 14px;
-    color: rgba(0, 0, 0, 0.61);
-    background-color: #ff990091;
+    background-color: #0a4350f0;
 }

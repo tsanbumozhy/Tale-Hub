@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from myapp.views import UserViewSet, ProfileViewSet, GenreViewSet, StoriesViewSet, LikeViewSet, CommentViewSet
 from myapp.views import home, search, logout_view, genres, genre_stories, create_user, create_story, story_details, edit_profile, like
-from myapp.views import my_stories, read_list, favourites, add_comment, edit_comment, delete_comment, view_pdf
+from myapp.views import my_stories, read_list, favourites, add_genre, add_comment, edit_comment, delete_comment, view_pdf
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
@@ -26,6 +26,8 @@ urlpatterns = [
     path('', home, name='home'),
 
     path('search/', search, name='search'),
+
+    path('add_genre/', add_genre, name='add_genre'),
 
     path('create_story/', create_story, name='create_story'),
     path('story/<str:story_id>/', story_details, name='story_details'),

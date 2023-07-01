@@ -11,7 +11,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Genre, Stories, Like, Comment
 from .serializers.serializers import UserSerializer, ProfileSerializer, GenreSerializer, StoriesSerializer, LikeSerializer, CommentSerializer
-from .forms import RegistrationForm, ProfileForm, StoryForm, CommentForm
+from .forms import RegistrationForm, ProfileForm, GenreForm,StoryForm, CommentForm
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -61,6 +61,22 @@ def genre_stories(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
     stories = Stories.objects.filter(genre_id=genre.genre_id).order_by('title')
     return render(request, 'genre_stories.html', { 'User': user_details, 'Profile': profile_details, 'Genres': genres, 'Genre': genre, 'Stories': stories })
+
+def add_genre(request):
+    if request.method == 'POST':
+        form = GenreForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('create_story')
+    else:
+        form = GenreForm()
+    
+    username = request.user.username
+    user_details = User.objects.get(username=username)
+    profile_details = Profile.objects.get(user=user_details.id)
+    genres = Genre.objects.all
+
+    return render(request, 'write.html', {'form': form, 'User': user_details, 'Profile': profile_details, 'Genres': genres})
 
 def create_user(request):
     if request.method == 'POST':

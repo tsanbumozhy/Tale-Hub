@@ -55,9 +55,6 @@ class RegistrationForm(forms.Form):
             profile_data['profile_photo'] = profile_photo_file
         profile = Profile.objects.create(**profile_data)
         return user, profile
-
-
-
     
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -68,6 +65,11 @@ class ProfileForm(forms.ModelForm):
             'pen_name': forms.TextInput(),
             'profile_photo': forms.ClearableFileInput(attrs={'class': 'form-control-file', 'id': 'profile_photo'})
         }
+
+class GenreForm(forms.ModelForm):
+    class Meta:
+        model = Genre
+        fields = ['name', 'description']
 
 class StoryForm(forms.ModelForm):
     genre_id = forms.ModelMultipleChoiceField(queryset=Genre.objects.all(), widget=forms.CheckboxSelectMultiple, label='Genre', to_field_name='name')

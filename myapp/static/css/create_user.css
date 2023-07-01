@@ -5,12 +5,8 @@
 }
 
 body{
-    background-color: #3e444a;
-}
-
-.container{
-    background-image: url('static/images/2.jpg');
-    background-position: center;
+    background-image: url('https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-repeat: no-repeat;
     background-size: cover;
 }
 
@@ -19,7 +15,7 @@ body{
     margin: 10% 25%;
     padding: 30px 5px;
     text-align: center;
-    background: #ffffff57;
+    background: #a1a1a1e8;
 }
 
 form h5{
